@@ -97,11 +97,6 @@ bindkey "^[b" backward-word
 # Bind Option-Right to move one word right
 bindkey "^[f" forward-word
 
-# Bind Command-Left to move to the beginning of the line
-bindkey "^[OH" beginning-of-line
-# Bind Command-Right to move to the end of the line
-bindkey "^[OF" end-of-line
-
 # Make autocomplete case insensitive
 # Make globbing and completion case insensitive
 setopt NO_CASE_GLOB

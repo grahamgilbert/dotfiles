@@ -1,4 +1,9 @@
 shorten_path() {
+    # Define colors
+    local light_blue="%F{81}" # Light blue color code
+    local dark_blue="%F{blue}" # Dark blue color name
+    local RESET="%f" # Reset to default color
+
     # Capture the current working directory
     local path="$PWD"
     
@@ -18,23 +23,21 @@ shorten_path() {
     # Store the length of dirs array
     local len=${#dirs[@]}
     
-    # Initialize newpath with the need_slash value
-    local newpath="$need_slash"
+    # Initialize newpath with the need_slash value, color it if outside ~
+    local newpath="${need_slash:+$dark_blue/}$RESET"
     
     # Process directories except for the first (~ or outside ~) and the last one
     for (( i=1; i<$len; i++ )); do
         if [[ -n "${dirs[$i]}" ]]; then
-            # Shorten each directory to its first letter
-            newpath+="${dirs[$i][1,1]}/"
+            # Color each directory with light blue and slashes with dark blue
+            newpath+="${light_blue}${dirs[$i][1,1]}$RESET"
+            (( i < len - 1 )) && newpath+="${dark_blue}/$RESET" # Add slash for all but last
         fi
     done
     
-    # Append the last directory without shortening, unless we're at root or home
+    # Append the last directory without shortening, color it, no slash
     if [[ $len -gt 1 ]]; then
-        newpath+="${dirs[len]}"
-    elif [[ "$need_slash" == "/" ]]; then
-        # If at the filesystem root and need_slash is set, remove the trailing slash for aesthetics
-        newpath="${newpath%/}"
+        newpath+="${light_blue}${dirs[len]}$RESET"
     fi
     
     echo "$newpath"
@@ -88,6 +91,16 @@ precmd_functions+=("prompt_custom")
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
+
+# Bind Option-Left to move one word left
+bindkey "^[b" backward-word
+# Bind Option-Right to move one word right
+bindkey "^[f" forward-word
+
+# Bind Command-Left to move to the beginning of the line
+bindkey "^[OH" beginning-of-line
+# Bind Command-Right to move to the end of the line
+bindkey "^[OF" end-of-line
 
 # Make autocomplete case insensitive
 # Make globbing and completion case insensitive

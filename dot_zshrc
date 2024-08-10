@@ -61,10 +61,12 @@ prompt_custom() {
     local BRANCH=$(git branch --show-current)
     # Check for uncommitted changes and adjust the branch color
     if ! git diff --quiet; then
-      BRANCH="%{$BLUE%}${BRANCH}"
+      BRANCH="%{$BLUE%}${BRANCH}%{$RESET%}"
+    else
+      BRANCH="${BRANCH}"
     fi
-    # Append branch info to the prompt
-    PWD_PROMPT="${PWD_PROMPT} [${BRANCH}]"
+    # Append branch info to the prompt, ensuring the closing bracket is in the default color
+    PWD_PROMPT="${PWD_PROMPT} [%{$RESET%}${BRANCH}]"
   fi
 
   # Set the prompt
@@ -89,5 +91,12 @@ bindkey '^[[B' history-beginning-search-forward
 setopt NO_CASE_GLOB
 setopt NOCASEGLOB
 
+function git_push_origin_current_branch() {
+    local branchname=$(git rev-parse --abbrev-ref HEAD)
+    git push origin "$branchname"
+}
+alias gpo='git_push_origin_current_branch'
+
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/Dropbox/Config/bin:$PATH"
+export EDITOR="code --wait"

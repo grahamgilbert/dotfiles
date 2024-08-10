@@ -1,0 +1,28 @@
+[push]
+	default = current
+[rerere]
+	enabled = true
+[core]
+	precomposeunicode = true
+	excludesfile = /Users/graham_gilbert/.gitignore_global
+[user]
+	name = Graham Gilbert
+	email = graham.gilbert@airbnb.com
+[diff]
+	tool = Kaleidoscope
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+	trustExitCode = true
+[merge]
+	tool = Kaleidoscope
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	prompt = false
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main

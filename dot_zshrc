@@ -59,19 +59,22 @@ prompt_custom() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
     # Get the current branch name
     local BRANCH=$(git branch --show-current)
-    # Check for uncommitted changes and adjust the branch color
-    if ! git diff --quiet; then
+    
+    # Check for any changes including untracked files and adjust the branch color
+    if [[ -n $(git status --porcelain) ]]; then
+      # If there are any changes, color the branch name blue
       BRANCH="%{$BLUE%}${BRANCH}%{$RESET%}"
-    else
-      BRANCH="${BRANCH}"
     fi
-    # Append branch info to the prompt, ensuring the closing bracket is in the default color
+    
+    # Append branch info to the prompt, ensuring the closing bracket and the rest remain in default color
     PWD_PROMPT="${PWD_PROMPT} [%{$RESET%}${BRANCH}]"
   fi
 
   # Set the prompt
   PROMPT="${PWD_PROMPT} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
+
+# The rest of your .zshrc configurations...
 
 autoload -Uz compinit
 compinit

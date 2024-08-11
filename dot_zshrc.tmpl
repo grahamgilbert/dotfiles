@@ -15,39 +15,39 @@ shorten_path() {
 
     # Capture the current working directory
     local path="$PWD"
-    
+
     # Initialize display_path with the path, replacing home directory with ~
     local display_path="${path/#$HOME/~}"
-    
+
     # Split the path into an array of directories
     local -a dirs
     dirs=("${(@s:/:)display_path}")
-    
+
     # Store the length of dirs array
     local len=${#dirs[@]}
-    
+
     # Initialize newpath
     local newpath=""
-    
+
     # Special handling to ensure slash after ~ is correctly handled
-    if [[ "$display_path" =~ ^~(/|$) ]]; then
+    if [[ "$display_path" == "~" ]]; then
         newpath="${light_blue}~${RESET}"
     else
-        newpath="${dark_blue}/${RESET}"
+        newpath="${light_blue}~${RESET}${dark_blue}/${RESET}"
     fi
-    
+
     # Process directories except for the first (~ or outside ~) and the last one
     for (( i=2; i<len; i++ )); do
         # Color each directory with light blue and slashes with dark blue
-        newpath+="${light_blue}${dirs[$i][1,1]}$RESET"
-        newpath+="${dark_blue}/$RESET" # Add slash for all but last
+        newpath+="${light_blue}${dirs[$i][1,1]}${RESET}"
+        newpath+="${dark_blue}/${RESET}" # Add slash for all but last
     done
-    
+
     # Append the last directory without shortening, color it
     if [[ $len -ge 2 ]]; then
-        newpath+="${light_blue}${dirs[len]}$RESET"
+        newpath+="${light_blue}${dirs[len]}${RESET}"
     fi
-    
+
     echo "$newpath"
 }
 
@@ -82,21 +82,13 @@ prompt_status() {
     # Set the prompt
     PROMPT="${PWD_PROMPT}${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
+
 # Register the custom prompt function to be called before displaying each prompt
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_status
 
-# Initialize completion
 autoload -Uz compinit
 compinit
-
-# Make autocomplete case insensitive
-setopt NO_CASE_GLOB
-setopt NOCASEGLOB
-
-# Optional: Bind the up and down arrow keys to search the command history
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
 
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward

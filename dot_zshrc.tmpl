@@ -60,9 +60,9 @@ shorten_path() {
 
 prompt_status() {
     # Define colors
-    local RESET="%f"
-    local GREEN="%F{green}"
     local RED="%F{red}"
+    local GREEN="%F{green}"
+    local RESET="%f"
     local BLUE="%F{81}" # Light blue color code for directories
     local DARK_BLUE="%F{blue}" # Dark blue color name for slashes
 
@@ -89,13 +89,21 @@ prompt_status() {
     # Set the prompt
     PROMPT="${PWD_PROMPT}${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
-
 # Register the custom prompt function to be called before displaying each prompt
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_status
 
+# Initialize completion
 autoload -Uz compinit
 compinit
+
+# Make autocomplete case insensitive
+setopt NO_CASE_GLOB
+setopt NOCASEGLOB
+
+# Optional: Bind the up and down arrow keys to search the command history
+bindkey '^[[A' history-beginning-search-backward
+bindkey '^[[B' history-beginning-search-forward
 
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward

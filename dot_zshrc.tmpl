@@ -51,36 +51,42 @@ shorten_path() {
 
 # Function to customize the prompt
 prompt_custom() {
-  # Colors
-  local RESET="%f"
-  local GREEN="%F{green}"
-  local RED="%F{red}"
-  local BLUE="%F{blue}"
+    # Define colors
+    local RESET="%f"
+    local GREEN="%F{green}"
+    local RED="%F{red}"
+    local BLUE="%F{81}" # Light blue color code for directories
+    local DARK_BLUE="%F{blue}" # Dark blue color name for slashes
 
-  # Get the shortened path
-  local PWD_PROMPT="$(shorten_path)"
-
-  # Determine the color of the prompt character based on the last command's exit status
-  local STATUS_COLOR=$GREEN
-  [[ $? != 0 ]] && STATUS_COLOR=$RED
-
-  # Check if the current directory is within a Git repository
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    # Get the current branch name
-    local BRANCH=$(git branch --show-current)
+    # Capture the current working directory
+    local path="$PWD"
     
-    # Check for any changes including untracked files and adjust the branch color
-    if [[ -n $(git status --porcelain) ]]; then
-      # If there are any changes, color the branch name blue
-      BRANCH="%{$BLUE%}${BRANCH}%{$RESET%}"
+    # Initialize display_path with the path, replacing home directory with ~
+    local display_path="${path/#$HOME/~}"
+
+    # Get the shortened path with custom coloring
+    local PWD_PROMPT="$(shorten_path)"
+
+    # Determine the color of the prompt character based on the last command's exit status
+    local STATUS_COLOR="$GREEN"
+    # $? captures the exit status of the last command. We check it here.
+    if [[ $? != 0 ]]; then
+        STATUS_COLOR="$RED"
     fi
-    
-    # Append branch info to the prompt, ensuring the closing bracket and the rest remain in default color
-    PWD_PROMPT="${PWD_PROMPT} [%{$RESET%}${BRANCH}]"
-  fi
 
-  # Set the prompt
-  PROMPT="${PWD_PROMPT} %{$STATUS_COLOR%}❯%{$RESET%} "
+    # Append Git branch information if in a Git repository
+    local GIT_BRANCH=""
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        local BRANCH_NAME="$(git branch --show-current)"
+        if [[ -n $(git status --porcelain) ]]; then
+            GIT_BRANCH=" [${DARK_BLUE}${BRANCH_NAME}${RESET}]"
+        else
+            GIT_BRANCH=" [${BRANCH_NAME}]"
+        fi
+    fi
+
+    # Set the prompt
+    PROMPT="${PWD_PROMPT}${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
 
 autoload -Uz compinit

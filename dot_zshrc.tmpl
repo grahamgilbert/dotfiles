@@ -7,7 +7,6 @@ preexec() {
   LAST_EXIT_STATUS=$?
 }
 
-
 shorten_path() {
     # Define colors
     local light_blue="%F{81}" # Light blue color code
@@ -60,70 +59,6 @@ shorten_path() {
 }
 
 prompt_status() {
-
-  # Your path shortening and coloring logic
-  local PWD_PROMPT="$(shorten_path)"
-
-  # Define colors
-  local RED="%F{red}"
-  local GREEN="%F{green}"
-  local RESET="%f"
-  local BLUE="%F{81}" # For Git branch, as an example
-
-  # Determine the color of the prompt character based on the last command's exit status
-  local STATUS_COLOR="%F{green}"
-  [[ $LAST_EXIT_STATUS != 0 ]] && STATUS_COLOR="%F{red}"
-
-  # Git Branch information (simplified version)
-  local GIT_BRANCH=""
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    GIT_BRANCH="[$(git branch --show-current)]"
-  fi
-
-  # Update the PS1 (primary prompt string) with path and Git branch
-  PS1="${PWD_PROMPT} ${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
-}
-
-# Register the custom prompt function to be called before each prompt
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd prompt_status
-
-autoload -Uz compinit
-compinit
-
-# Optional: Bind the up and down arrow keys to search the command history
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
-
-# Bind Option-Left to move one word left
-bindkey "^[b" backward-word
-# Bind Option-Right to move one word right
-bindkey "^[f" forward-word
-
-# Make autocomplete case insensitive
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
-
-# Make autocomplete case insensitive
-# Make globbing and completion case insensitive
-setopt NO_CASE_GLOB
-setopt NOCASEGLOB
-
-function git_push_origin_current_branch() {
-    local branchname=$(git rev-parse --abbrev-ref HEAD)
-    git push origin "$branchname"
-}
-alias gpo='git_push_origin_current_branch'
-
-alias airdev='yak ws vscode'
-
-{{ if eq .chezmoi.os "darwin" }}
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="$HOME/Dropbox/Config/bin:$PATH"
-export EDITOR="code --wait"
-{{ end }}
-
-# Function to customize the prompt
-prompt_custom() {
     # Define colors
     local RESET="%f"
     local GREEN="%F{green}"
@@ -131,19 +66,12 @@ prompt_custom() {
     local BLUE="%F{81}" # Light blue color code for directories
     local DARK_BLUE="%F{blue}" # Dark blue color name for slashes
 
-    # Capture the current working directory
-    local path="$PWD"
-    
-    # Initialize display_path with the path, replacing home directory with ~
-    local display_path="${path/#$HOME/~}"
-
-    # Get the shortened path with custom coloring
+    # Capture the current working directory and shorten the path
     local PWD_PROMPT="$(shorten_path)"
 
     # Determine the color of the prompt character based on the last command's exit status
     local STATUS_COLOR="$GREEN"
-    # $? captures the exit status of the last command. We check it here.
-    if [[ $? != 0 ]]; then
+    if [[ $LAST_EXIT_STATUS != 0 ]]; then
         STATUS_COLOR="$RED"
     fi
 
@@ -162,15 +90,12 @@ prompt_custom() {
     PROMPT="${PWD_PROMPT}${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
 
+# Register the custom prompt function to be called before displaying each prompt
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd prompt_status
+
 autoload -Uz compinit
 compinit
-
-# Make autocomplete case insensitive
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
-
-# Register the custom prompt function to be called before each prompt
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd prompt_custom
 
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward
@@ -182,6 +107,8 @@ bindkey "^[b" backward-word
 bindkey "^[f" forward-word
 
 # Make autocomplete case insensitive
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
 # Make globbing and completion case insensitive
 setopt NO_CASE_GLOB
 setopt NOCASEGLOB

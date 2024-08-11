@@ -49,6 +49,72 @@ shorten_path() {
     echo "$newpath"
 }
 
+prompt_status() {
+  local last_exit_status="$?" # Capture the last command's exit status immediately
+
+  # Your path shortening and coloring logic
+  local PWD_PROMPT="$(shorten_path)"
+
+  # Define colors
+  local RED="%F{red}"
+  local GREEN="%F{green}"
+  local RESET="%f"
+  local BLUE="%F{81}" # For Git branch, as an example
+
+  # Determine the color of the prompt character based on the last command's exit status
+  local STATUS_COLOR="$GREEN"
+  if [[ $last_exit_status != 0 ]]; then
+    STATUS_COLOR="$RED"
+  fi
+
+  # Git Branch information (simplified version)
+  local GIT_BRANCH=""
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    GIT_BRANCH="[$(git branch --show-current)]"
+  fi
+
+  # Update the PS1 (primary prompt string) with path and Git branch
+  PS1="${PWD_PROMPT} ${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
+}
+
+autoload -Uz compinit
+compinit
+
+# Register the custom prompt function to be called before each prompt
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd prompt_status
+
+# Optional: Bind the up and down arrow keys to search the command history
+bindkey '^[[A' history-beginning-search-backward
+bindkey '^[[B' history-beginning-search-forward
+
+# Bind Option-Left to move one word left
+bindkey "^[b" backward-word
+# Bind Option-Right to move one word right
+bindkey "^[f" forward-word
+
+# Make autocomplete case insensitive
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
+# Make autocomplete case insensitive
+# Make globbing and completion case insensitive
+setopt NO_CASE_GLOB
+setopt NOCASEGLOB
+
+function git_push_origin_current_branch() {
+    local branchname=$(git rev-parse --abbrev-ref HEAD)
+    git push origin "$branchname"
+}
+alias gpo='git_push_origin_current_branch'
+
+alias airdev='yak ws vscode'
+
+{{ if eq .chezmoi.os "darwin" }}
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="$HOME/Dropbox/Config/bin:$PATH"
+export EDITOR="code --wait"
+{{ end }}
+
 # Function to customize the prompt
 prompt_custom() {
     # Define colors

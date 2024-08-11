@@ -23,25 +23,32 @@ shorten_path() {
     # Store the length of dirs array
     local len=${#dirs[@]}
     
-    # Initialize newpath with the need_slash value, color it if outside ~
-    local newpath="${need_slash:+$dark_blue/}$RESET"
+    # Initialize newpath
+    local newpath=""
+    
+    # Special handling to ensure slash after ~ is correctly handled
+    if [[ "$display_path" =~ ^~(/|$) ]]; then
+        newpath="${light_blue}~$RESET"
+        need_slash="$dark_blue/$RESET" # Set need_slash to dark blue slash for consistant coloring
+    else
+        newpath="${need_slash:+$dark_blue/}$RESET"
+    fi
     
     # Process directories except for the first (~ or outside ~) and the last one
-    for (( i=1; i<$len; i++ )); do
-        if [[ -n "${dirs[$i]}" ]]; then
-            # Color each directory with light blue and slashes with dark blue
-            newpath+="${light_blue}${dirs[$i][1,1]}$RESET"
-            (( i < len - 1 )) && newpath+="${dark_blue}/$RESET" # Add slash for all but last
-        fi
+    for (( i=2; i<len; i++ )); do
+        # Color each directory with light blue and slashes with dark blue
+        newpath+="${light_blue}${dirs[$i][1,1]}$RESET"
+        newpath+="${dark_blue}/$RESET" # Add slash for all but last
     done
     
-    # Append the last directory without shortening, color it, no slash
-    if [[ $len -gt 1 ]]; then
+    # Append the last directory without shortening, color it
+    if [[ $len -ge 2 ]]; then
         newpath+="${light_blue}${dirs[len]}$RESET"
     fi
     
     echo "$newpath"
 }
+
 
 # Function to customize the prompt
 prompt_custom() {

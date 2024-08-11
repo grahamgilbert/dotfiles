@@ -29,7 +29,7 @@ shorten_path() {
     # Special handling to ensure slash after ~ is correctly handled
     if [[ "$display_path" =~ ^~(/|$) ]]; then
         newpath="${light_blue}~$RESET"
-        need_slash="$dark_blue/$RESET" # Set need_slash to dark blue slash for consistant coloring
+        need_slash="$dark_blue/$RESET" # Set need_slash to dark blue slash for consistent coloring
     else
         newpath="${need_slash:+$dark_blue/}$RESET"
     fi
@@ -48,7 +48,6 @@ shorten_path() {
     
     echo "$newpath"
 }
-
 
 # Function to customize the prompt
 prompt_custom() {
@@ -84,8 +83,6 @@ prompt_custom() {
   PROMPT="${PWD_PROMPT} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
 
-# The rest of your .zshrc configurations...
-
 autoload -Uz compinit
 compinit
 
@@ -93,7 +90,8 @@ compinit
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
 # Register the custom prompt function to be called before each prompt
-precmd_functions+=("prompt_custom")
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd prompt_custom
 
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward

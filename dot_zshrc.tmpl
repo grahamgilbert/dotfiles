@@ -77,12 +77,12 @@ prompt_status() {
   PS1="${PWD_PROMPT} ${GIT_BRANCH} %{$STATUS_COLOR%}❯%{$RESET%} "
 }
 
-autoload -Uz compinit
-compinit
-
 # Register the custom prompt function to be called before each prompt
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_status
+
+autoload -Uz compinit
+compinit
 
 # Optional: Bind the up and down arrow keys to search the command history
 bindkey '^[[A' history-beginning-search-backward

@@ -19,12 +19,6 @@ shorten_path() {
     # Initialize display_path with the path, replacing home directory with ~
     local display_path="${path/#$HOME/~}"
     
-    # Determine if we're outside the home directory and need a leading slash
-    local need_slash=""
-    if [[ "$display_path" != "~"* ]]; then
-        need_slash="/"
-    fi
-    
     # Split the path into an array of directories
     local -a dirs
     dirs=("${(@s:/:)display_path}")
@@ -37,10 +31,9 @@ shorten_path() {
     
     # Special handling to ensure slash after ~ is correctly handled
     if [[ "$display_path" =~ ^~(/|$) ]]; then
-        newpath="${light_blue}~$RESET"
-        need_slash="$dark_blue/$RESET" # Set need_slash to dark blue slash for consistent coloring
+        newpath="${light_blue}~${RESET}"
     else
-        newpath="${need_slash:+$dark_blue/}$RESET"
+        newpath="${dark_blue}/${RESET}"
     fi
     
     # Process directories except for the first (~ or outside ~) and the last one

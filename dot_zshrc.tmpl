@@ -1,3 +1,13 @@
+# Define a global variable to store the last command's exit status
+LAST_EXIT_STATUS=0
+
+# A preexec function runs before each command execution.
+preexec() {
+  # Capture the last exit status right before the next command executes
+  LAST_EXIT_STATUS=$?
+}
+
+
 shorten_path() {
     # Define colors
     local light_blue="%F{81}" # Light blue color code
@@ -50,7 +60,6 @@ shorten_path() {
 }
 
 prompt_status() {
-  local last_exit_status="$?" # Capture the last command's exit status immediately
 
   # Your path shortening and coloring logic
   local PWD_PROMPT="$(shorten_path)"
@@ -62,10 +71,8 @@ prompt_status() {
   local BLUE="%F{81}" # For Git branch, as an example
 
   # Determine the color of the prompt character based on the last command's exit status
-  local STATUS_COLOR="$GREEN"
-  if [[ $last_exit_status != 0 ]]; then
-    STATUS_COLOR="$RED"
-  fi
+  local STATUS_COLOR="%F{green}"
+  [[ $LAST_EXIT_STATUS != 0 ]] && STATUS_COLOR="%F{red}"
 
   # Git Branch information (simplified version)
   local GIT_BRANCH=""

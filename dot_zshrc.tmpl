@@ -114,6 +114,13 @@ alias gpo='git_push_origin_current_branch'
 
 alias airdev='yak ws vscode'
 
+# Set the number of lines of history to save in the memory
+HISTSIZE=
+# Set the number of lines of history to save to the history file
+SAVEHIST=
+# Set the file to save the history
+HISTFILE=~/.zsh_history
+
 {{ if eq .chezmoi.os "darwin" }}
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/Dropbox/Config/bin:$PATH"

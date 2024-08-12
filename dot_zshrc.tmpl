@@ -90,9 +90,11 @@ add-zsh-hook precmd prompt_status
 autoload -Uz compinit
 compinit
 
-# Optional: Bind the up and down arrow keys to search the command history
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
+source ~/.zsh-history-substring-search.zsh
+
+# Bind up and down arrow keys to the history substring search functions
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Bind Option-Left to move one word left
 bindkey "^[b" backward-word

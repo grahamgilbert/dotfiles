@@ -122,6 +122,11 @@ HISTSIZE=1000000
 SAVEHIST=1000000
 # Set the file to save the history
 HISTFILE=~/.zsh_history
+setopt APPEND_HISTORY            # Append history to the history file (don't overwrite it)
+setopt INC_APPEND_HISTORY        # Immediately append to the history file, not just when the shell exits
+setopt SHARE_HISTORY             # Share history across all sessions
+setopt HIST_IGNORE_ALL_DUPS      # Do not record an entry that matches a previous entry
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry
 
 {{ if eq .chezmoi.os "darwin" }}
 export PATH="/opt/homebrew/bin:$PATH"

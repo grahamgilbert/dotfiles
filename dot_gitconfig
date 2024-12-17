@@ -26,3 +26,5 @@
 	rebase = false
 [init]
 	defaultBranch = main
+[url "ssh://git@git.musta.ch/"]
+    insteadOf = https://git.musta.ch/

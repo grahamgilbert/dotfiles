@@ -144,4 +144,15 @@ if [ -f '/Users/graham_gilbert/Library/CloudStorage/Dropbox/Config/bin/google-cl
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/graham_gilbert/Library/CloudStorage/Dropbox/Config/bin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/graham_gilbert/Library/CloudStorage/Dropbox/Config/bin/google-cloud-sdk/completion.zsh.inc'; fi
+
+# AIRLAB-DO-NOT-MODIFY section:ShellWrapper {{{
+# Airlab will only make edits inside these delimiters.
+
+# Source Airlab's shell integration, if it exists.
+if [ -e ~/.airlab/shellhelper.sh ]; then
+  source ~/.airlab/shellhelper.sh
+fi
+# AIRLAB-DO-NOT-MODIFY section:ShellWrapper }}}
+
+alias gam="/Users/graham_gilbert/bin/gam7/gam"
 {{ end }}

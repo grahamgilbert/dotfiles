@@ -151,3 +151,7 @@ if [ -f "/Applications/YubiKey Manager.app/Contents/MacOS/ykman" ]; then
 fi
 export CELL_AUTH_AWS_PROFILE=airbnb_users
 {{ end }}
+
+{{ if eq .chezmoi.os "linux" }}
+export PATH="/opt/mise/installs/node/24.13.0/bin:$PATH"
+{{ end }}

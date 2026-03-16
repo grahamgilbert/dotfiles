@@ -5,6 +5,7 @@
 [core]
 	precomposeunicode = true
 	excludesfile = /Users/graham_gilbert/.gitignore_global
+	fsmonitor = true
 [user]
 	name = Graham Gilbert
 	email = graham.gilbert@airbnb.com
@@ -33,3 +34,5 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+[feature]
+	manyFiles = true

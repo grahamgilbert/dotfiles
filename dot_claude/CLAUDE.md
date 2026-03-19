@@ -7,3 +7,7 @@ When creating Google Docs, start from a copy of my template: <https://docs.googl
 ## Pull Requests
 
 Whenever submitting a pull request, you should keep checking that CI has passed. If CI fails, you should investigate the failure and attempt to fix it before requesting a review.
+
+## Committing Code
+
+Before committing code, run /global:airchat-review and fix any issues it identifies.

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 input=$(cat)
 
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')

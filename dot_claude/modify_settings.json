@@ -1,2 +1,2 @@
 #!/bin/sh
-jq --arg home "$HOME" '.statusLine = {"type": "command", "command": ("bash " + $home + "/.claude/statusline-command.sh")}'
+jq --arg home "$HOME" '.statusLine = {"type": "command", "command": ("bash '\''" + $home + "/.claude/statusline-command.sh'\''")}'

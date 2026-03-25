@@ -150,6 +150,7 @@ if [ -f "/Applications/YubiKey Manager.app/Contents/MacOS/ykman" ]; then
   export PATH="${PATH}:/Applications/YubiKey Manager.app/Contents/MacOS"
 fi
 export CELL_AUTH_AWS_PROFILE=airbnb_users
+export USE_IAPSSHCTL_TURBO=1
 
 # Added by CAWS configgen to activate mise
 eval "$(/opt/homebrew/bin/mise activate zsh)"

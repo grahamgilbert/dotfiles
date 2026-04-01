@@ -154,6 +154,8 @@ export USE_IAPSSHCTL_TURBO=1
 
 # Added by CAWS configgen to activate mise
 eval "$(/opt/homebrew/bin/mise activate zsh)"
+
+PATH=$PATH:/Users/graham_gilbert/Library/Python/3.12/bin
 {{ end -}}
 {{ if eq .chezmoi.os "linux" }}
 export PATH="/opt/mise/installs/node/24.13.0/bin:$PATH"

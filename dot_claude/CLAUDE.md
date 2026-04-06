@@ -15,3 +15,5 @@ Never run git commands in parallel. Always run git operations sequentially, one 
 ## Committing Code
 
 Before committing code, run /global:airchat-review and fix any issues it identifies. Only try to install arichat-review if it is not already installed. If you have already installed airchat-review, you should not try to install it again.
+
+@RTK.md

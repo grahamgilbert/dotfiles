@@ -1,0 +1,12 @@
+. "$HOME/.cargo/env"
+
+# gvm's cd() override calls its _encode/_decode helpers, but Claude Code's shell
+# snapshot drops all single-underscore functions (it filters zsh completion
+# funcs like _foo), so the restored cd() prints "command not found: _encode".
+# .zshenv is sourced by every shell incl. the snapshot-based one, so defining
+# them here (idempotent; gvm's own re-source is guarded) silences the noise.
+[[ -s "$HOME/.gvm/scripts/function/_bash_pseudo_hash" ]] && . "$HOME/.gvm/scripts/function/_bash_pseudo_hash"
+# _encode's hex branch shells out to $HEXDUMP_PATH (normally set by gvm's tools
+# script, also absent from the snapshot); without it, encoding a '/' in a path
+# runs an empty command. Set it here so the restored cd() stays silent.
+: "${HEXDUMP_PATH:=$(command -v hexdump)}"

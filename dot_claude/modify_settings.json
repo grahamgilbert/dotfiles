@@ -1,5 +1,6 @@
 #!/bin/sh
 jq --arg home "$HOME" '
   .statusLine = {"type": "command", "command": ("bash '\''" + $home + "/.claude/statusline-command.sh'\''")} |
+  .permissions.defaultMode = "auto" |
   .hooks.PreToolUse = [{"matcher": "Bash", "hooks": [{"type": "command", "command": ($home + "/.claude/hooks/rtk-rewrite.sh")}]}]
 '

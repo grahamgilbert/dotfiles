@@ -1,4 +1,4 @@
-. "$HOME/.cargo/env"
+[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
 # gvm's cd() override calls its _encode/_decode helpers, but Claude Code's shell
 # snapshot drops all single-underscore functions (it filters zsh completion

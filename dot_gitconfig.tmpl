@@ -44,3 +44,11 @@
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
 {{ end -}}
+{{ if eq .chezmoi.hostname "Thunderpants-mk-9" }}
+# iapsshctl gitconfig BEGIN - DO NOT EDIT
+[url "git@git.musta.ch:"]
+	insteadOf = https://git.musta.ch/
+[url "git@github.airbnb.biz:"]
+	insteadOf = https://github.airbnb.biz/
+# iapsshctl gitconfig END - DO NOT EDIT
+{{- end -}}

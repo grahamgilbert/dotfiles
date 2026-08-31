@@ -3,6 +3,10 @@ jq --arg home "$HOME" '
   .statusLine = {"type": "command", "command": ("bash '\''" + $home + "/.claude/statusline-command.sh'\''")} |
   .permissions.defaultMode = "auto" |
   .outputStyle = "Concise" |
+  .enabledPlugins["humanizer@humanizer"] = true |
+  .extraKnownMarketplaces.humanizer = {"source": {"source": "github", "repo": "blader/humanizer"}} |
+  .enabledPlugins["ponytail@ponytail"] = true |
+  .extraKnownMarketplaces.ponytail = {"source": {"source": "github", "repo": "DietrichGebert/ponytail"}} |
   .hooks.PreToolUse = (
     [{"matcher": "Bash", "hooks": [{"type": "command", "command": ($home + "/.claude/hooks/rtk-rewrite.sh")}]}]
     + [ (.hooks.PreToolUse // [])[] | select(any(.hooks[]?; .command | test("supacode-managed-hook"))) ]
